@@ -1,0 +1,96 @@
+/* Body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: dodgerblue; /* Background color for the whole page */
+  margin: 0;
+  padding: 0;
+}
+
+/* Header styling */
+header {
+  background-color: hotpink; /* Change this to your desired color */
+  color: white; /* Text color */
+  padding: 10px 0; /* Top and bottom padding */
+  text-align: center;
+}
+
+/* Navigation styling */
+nav ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 15px; /* Space between menu items */
+}
+
+nav ul li a {
+  color: white; /* Link color */
+  text-decoration: none; /* Remove underline from links */
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Form styling */
+form {
+  margin: 20px;
+  padding: 20px;
+  background-color:hotpink;
+  border: 1px solid #ddd;
+  border-color: hotpink; /* Border color */
+}
+
+#breathing-circle {
+  width: 100px;
+  height: 100px;
+  background-color: lightblue;
+  border-radius: 50%;
+  margin: 20px auto;
+  transition: transform 4s ease-in-out;
+}
+
+
+/* Footer styling */
+footer {
+  background-color:white; /* Light background color for the footer */
+  color: black; /* Text color */
+  padding: 20px 0; /* Top and bottom padding */
+  text-align: center;
+  position: fixed; /* Fixes the footer position */
+  bottom: 0; /* Aligns the footer to the bottom of the viewport */
+  width: 100%; /* Makes the footer span the full width of the page */
+  z-index: 1000; /* Ensures the footer stays on top of other content */
+}
+
+footer section {
+  margin-bottom: 15px;
+}
+
+footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+footer a {
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline from links */
+}
+
+footer a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+footer ul {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0;
+}
+
+footer ul li {
+  display: inline;
+  margin: 0 10px; /* Space between social media links */
+}

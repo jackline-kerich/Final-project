@@ -1,0 +1,214 @@
+<!-- templates/nurturewell/mindfulness.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mindfulness and Relaxation</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h1>Mindfulness and Relaxation</h1>
+
+    <!-- Guided Meditations Section -->
+    <section>
+        <h2>Guided Meditations</h2>
+        <ul>
+            {% for meditation in guided_meditations %}
+            <li>
+                <h3>{{ meditation.title }}</h3>
+                <p>{{ meditation.description }}</p>
+                <audio controls>
+                    <source src="{{ meditation.audio.url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- Breathing Exercises Section -->
+    <section>
+        <h2>Breathing Exercises</h2>
+        <div id="breathing-circle"></div>
+        <script>
+            // Simple breathing animation
+            const circle = document.getElementById('breathing-circle');
+            let grow = true;
+            setInterval(() => {
+                if (grow) {
+                    circle.style.transform = 'scale(1.5)';
+                } else {
+                    circle.style.transform = 'scale(1)';
+                }
+                grow = !grow;
+            }, 4000);
+        </script>
+    </section>
+
+    <!-- Gratitude Journal Section -->
+    <section>
+        <h2>Gratitude Journal</h2>
+        <form method="post" action="{% url 'save_gratitude' %}">
+            {% csrf_token %}
+            <textarea name="gratitude_entry" rows="4" cols="50" placeholder="What are you grateful for today?"></textarea><br>
+            <button type="submit">Save Entry</button>
+        </form>
+        <h3>Your Entries</h3>
+        <ul>
+            {% for entry in gratitude_entries %}
+            <li>{{ entry.date }}: {{ entry.text }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- Positive Affirmations Section -->
+    <section>
+        <h2>Positive Affirmations</h2>
+        <p id="affirmation-text">{{ current_affirmation }}</p>
+        <button onclick="newAffirmation()">New Affirmation</button>
+        <script>
+            function newAffirmation() {
+                fetch("{% url 'get_affirmation' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('affirmation-text').innerText = data.affirmation;
+                    });
+            }
+        </script>
+    </section>
+
+    <!-- Relaxing Soundscapes Section -->
+    <section>
+        <h2>Relaxing Soundscapes</h2>
+        <ul>
+            {% for sound in soundscapes %}
+            <li>
+                <h3>{{ sound.title }}</h3>
+                <audio controls loop>
+                    <source src="{{ sound.audio.url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- Mindful Movement Section -->
+    <section>
+        <h2>Mindful Movement</h2>
+        <ul>
+            {% for movement in mindful_movements %}
+            <li>
+                <h3>{{ movement.title }}</h3>
+                <p>{{ movement.description }}</p>
+                <video width="320" height="240" controls>
+                    <source src="{{ movement.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- Emotional Tracking Section -->
+    <section>
+        <h2>Emotional Tracking</h2>
+        <form method="post" action="{% url 'save_mood' %}">
+            {% csrf_token %}
+            <label for="mood">How do you feel today?</label>
+            <select name="mood" id="mood">
+                <option value="happy">Happy</option>
+                <option value="stressed">Stressed</option>
+                <option value="tired">Tired</option>
+                <option value="anxious">Anxious</option>
+                <option value="content">Content</option>
+            </select>
+            <button type="submit">Save Mood</button>
+        </form>
+        <h3>Your Mood History</h3>
+        <!-- You can integrate a chart here using Chart.js -->
+    </section>
+
+    <!-- Mindfulness Challenges Section -->
+    <section>
+        <h2>Mindfulness Challenges</h2>
+        <ul>
+            {% for challenge in mindfulness_challenges %}
+            <li>
+                <p>{{ challenge.description }}</p>
+                <!-- Optionally add a checkbox or completion button -->
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Add inside Emotional Tracking Section -->
+<canvas id="moodChart" width="400" height="200"></canvas>
+<script>
+    const moodData = JSON.parse('{{ mood_data|escapejs }}');
+    const labels = moodData.map(entry => entry.date);
+    const happy = moodData.map(entry => entry.happy);
+    const stressed = moodData.map(entry => entry.stressed);
+    const tired = moodData.map(entry => entry.tired);
+    const anxious = moodData.map(entry => entry.anxious);
+    const content = moodData.map(entry => entry.content);
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Happy',
+                data: happy,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+            },
+            {
+                label: 'Stressed',
+                data: stressed,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: false,
+            },
+            {
+                label: 'Tired',
+                data: tired,
+                borderColor: 'rgba(201, 203, 207, 1)',
+                fill: false,
+            },
+            {
+                label: 'Anxious',
+                data: anxious,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false,
+            },
+            {
+                label: 'Content',
+                data: content,
+                borderColor: 'rgba(255, 206, 86, 1)',
+                fill: false,
+            },
+        ]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Mood Over the Past Week'
+                }
+            }
+        },
+    };
+
+    const moodChart = new Chart(
+        document.getElementById('moodChart'),
+        config
+    );
+</script>
+
+</body>
+</html>

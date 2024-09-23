@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Metrics - NurtureWell</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h2>Track Your Health Metrics</h2>
+    
+    <form id="health-metrics-form">
+        {% csrf_token %}
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" name="weight" required><br>
+
+        <label for="systolic">Systolic Blood Pressure (mm Hg):</label>
+        <input type="number" id="systolic" name="systolic" required><br>
+
+        <label for="diastolic">Diastolic Blood Pressure (mm Hg):</label>
+        <input type="number" id="diastolic" name="diastolic" required><br>
+
+        <label for="sleep_hours">Sleep Hours (Daily):</label>
+        <input type="number" id="sleep_hours" name="sleep_hours" required><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <h3>Your Health Metrics Chart</h3>
+    <canvas id="metricsChart"></canvas>
+
+    <h3>Tips for Expectant Mothers</h3>
+    <ul>
+        <li>Maintain a balanced diet rich in vitamins and minerals.</li>
+        <li>Monitor your weight regularly to ensure a healthy pregnancy.</li>
+        <li>Stay hydrated and aim for 7-9 hours of sleep each night.</li>
+        <li>Consult with your healthcare provider for personalized advice.</li>
+    </ul>
+
+    <h3>Your Progress</h3>
+    <div id="progress-tracker">
+        <p>Keep track of your milestones and any significant changes in your health metrics.</p>
+        <textarea id="personal-notes" placeholder="Write your notes here..."></textarea>
+        <button id="save-notes">Save Notes</button>
+    </div>
+
+    <script>
+        // Handle form submission with AJAX
+        $('#health-metrics-form').submit(function(event) {
+            event.preventDefault();  // Prevent default form submission
+            $.ajax({
+                url: '{% url "health_metrics" %}',  // Ensure this URL is correct
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Health metrics submitted successfully!');
+                        $('#health-metrics-form').trigger('reset');  // Clear the form
+                        fetchChartData();  // Fetch updated chart data
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An error occurred: ' + error);
+                }
+            });
+        });
+
+        // Function to fetch updated chart data from Django backend
+        function fetchChartData() {
+            $.ajax({
+                url: '{% url "get_health_metrics" %}',  // URL for fetching updated health metrics data
+                type: 'GET',
+                success: function(data) {
+                    updateChart(data);  // Update the chart with the new data
+                }
+            });
+        }
+
+        // Initialize the chart
+        const ctx = document.getElementById('metricsChart').getContext('2d');
+        const metricsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Weight (kg)',
+                    data: [],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false,
+                }, {
+                    label: 'Sleep Hours',
+                    data: [],
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    fill: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Metrics'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to update the chart with new data
+        function updateChart(data) {
+            const labels = data.dates;
+            const weightData = data.weight;
+            const sleepData = data.sleep;
+
+            metricsChart.data.labels = labels;
+            metricsChart.data.datasets[0].data = weightData;
+            metricsChart.data.datasets[1].data = sleepData;
+            metricsChart.update();
+        }
+
+        // Save personal notes functionality
+        $('#save-notes').click(function() {
+            const notes = $('#personal-notes').val();
+            // You could send this to your backend for storage
+            console.log('Notes saved:', notes);
+            alert('Notes saved!');
+        });
+
+        // Fetch the initial chart data when the page loads
+        fetchChartData();
+    </script>
+
+</body>
+</html>

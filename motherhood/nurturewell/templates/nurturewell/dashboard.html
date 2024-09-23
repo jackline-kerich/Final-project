@@ -1,0 +1,26 @@
+<!-- nurturewell/templates/nurturewell/dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to your Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'health_metrics' %}">Track Health Metrics</a></li>
+                <li><a href="{% url 'mindfulness' %}">Mindfulness and Relaxation</a></li>
+                <li><a href="{% url 'community' %}">Community</a></li>
+                <li><a href="{% url 'evidence_info' %}">Evidence-Based Information</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <p>Welcome, {{ user.username }}!</p>
+        <a href="{% url 'logout' %}">Logout</a>
+    </main>
+</body>
+</html>

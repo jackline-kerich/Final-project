@@ -1,0 +1,25 @@
+<!-- templates/nurturewell/evidence_info.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}"> 
+<h1>Evidence-Based Information</h1>
+<ul>
+    <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Pregnancy</a></li>
+    <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Childbirth</a></li>
+    <li><a href="{% url 'evidence_info_category' 'Postpartum' %}">Postpartum Recovery</a></li>
+    <li><a href="{% url 'evidence_info_category' 'Infant Care' %}">Infant Care</a></li>
+</ul>
+
+<h2>Information on {{ category }}</h2>
+{% if info_list %}
+    <ul>
+        {% for info in info_list %}
+        <li>
+            <h3>{{ info.title }}</h3>
+            <p>{{ info.content }}</p>
+            <small>Published on {{ info.published_at }}</small>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No information available for this category.</p>
+{% endif %}
