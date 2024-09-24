@@ -17,6 +17,11 @@ from .models import (
     MindfulnessActivity, GuidedMeditation, Soundscape, MindfulMovement,
     GratitudeEntry, Affirmation, MoodEntry, MindfulnessChallenge
 )
+from django.shortcuts import render, get_object_or_404,redirect
+from .models import UserProfile
+from .models import Post, Comment
+from .forms import CommentForm
+
 # Home view
 def home_view(request):
     return render(request, 'nurturewell/home.html')
@@ -188,3 +193,62 @@ def evidence_info_view(request, category=None):
     context = {'info_list': info_list}
     return render(request, 'nurturewell/evidence_info.html', context)
 
+def profile_view(request, username):
+    user_profile = get_object_or_404(UserProfile, user__username=username)
+    return render(request, 'nurturewell/profile.html', {'profile': user_profile})
+
+@login_required  # To ensure only logged-in users can post comments
+def post_detail_view(request, post_id):
+    # Get the post by ID
+    post = get_object_or_404(Post, id=post_id)
+    
+    # Get all related comments for the post
+    comments = post.comments.all()
+
+    # If the request is a POST method, process the comment form
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            # Create a new comment without saving to the database yet
+            comment = form.save(commit=False)
+            comment.post = post  # Associate the comment with the post
+            comment.user = request.user  # Associate the comment with the logged-in user
+            comment.save()  # Save the comment to the database
+            return redirect('post_detail', post_id=post.id)  # Redirect to the same post detail page after saving
+    else:
+        # If GET request, just show an empty form
+        form = CommentForm()
+
+    # Render the post detail template with post, comments, and form
+    return render(request, 'nurturewell/post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'form': form,
+    })
+def react_to_post(request, post_id):
+    # Get the post by ID
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        # Process the reaction, e.g., like or dislike
+        reaction_type = request.POST.get('reaction')  # Assuming 'reaction' is passed in the form data
+
+        # Here, you can implement your logic for handling reactions
+        # For example, increasing like count, etc.
+        if reaction_type == 'like':
+            post.likes += 1
+        elif reaction_type == 'dislike':
+            post.dislikes += 1
+        
+        # Save the post after reaction
+        post.save()
+
+        # Redirect back to the post detail page
+        return redirect('post_detail', post_id=post.id)
+
+    # If not a POST request, redirect to post detail (or handle as needed)
+    return redirect('post_detail', post_id=post.id)
+def profile(request):
+    return render(request, 'nurturewell/profile.html', {'profile': profile})
+
+    

@@ -12,6 +12,7 @@
     {% endfor %}
 </ul>
 
+
 <!-- Add within Supportive Community Section -->
 <div id="chat-container">
     <h2>Chat</h2>
@@ -29,11 +30,12 @@
         const data = JSON.parse(e.data);
         const message = data.message;
         const user = data.user;
+        const timestamp = new Date().toLocaleTimeString(); // Add timestamp
         const chatMessages = document.getElementById('chat-messages');
         const messageElement = document.createElement('div');
-        messageElement.innerHTML = `<strong>${user}:</strong> ${message}`;
+        messageElement.innerHTML = `<strong>${user}:</strong> ${message} <small>${timestamp}</small>`;
         chatMessages.appendChild(messageElement);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
     };
 
     chatSocket.onclose = function(e) {
@@ -46,9 +48,10 @@
         if (message.trim() !== "") {
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'user': '{{ request.user.username }}',
+                'user': '{{ request.user.username }}', // Adjust as necessary
             }));
-            input.value = '';
+            input.value = ''; // Clear input field
+            input.focus(); // Focus back on input field
         }
     }
 </script>

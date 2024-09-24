@@ -1,7 +1,10 @@
 <!-- templates/nurturewell/evidence_info.html -->
 {% load static %}
 <link rel="stylesheet" href="{% static 'style.css' %}"> 
+
 <h1>Evidence-Based Information</h1>
+
+<!-- Navigation for different categories -->
 <ul>
     <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Pregnancy</a></li>
     <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Childbirth</a></li>
@@ -10,6 +13,27 @@
 </ul>
 
 <h2>Information on {{ category }}</h2>
+
+<!-- Helpful paragraphs for each category -->
+{% if category == 'Pregnancy' %}
+    <p>Pregnancy is a time of significant change for mothers. It's essential to focus on nutrition, regular check-ups, and mental well-being.</p>
+    <p>Consider discussing your concerns with healthcare providers to ensure a healthy pregnancy.</p>
+{% elif category == 'Childbirth' %}
+    <p>Preparing for childbirth involves understanding the process and creating a birth plan. Consider what kind of environment you want during labor.</p>
+{% elif category == 'Postpartum' %}
+    <p>Postpartum recovery is crucial. Rest, nutrition, and support are key to recovery during this period.</p>
+{% elif category == 'Infant Care' %}
+    <p>Infant care requires attention to feeding, sleeping, and developmental milestones. Connecting with pediatricians for guidance is beneficial.</p>
+{% endif %}
+
+<h3>Related Articles</h3>
+<ul>
+    <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Read more about Pregnancy</a></li>
+    <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Read more about Childbirth</a></li>
+    <li><a href="{% url 'evidence_info_category' 'Postpartum' %}">Read more about Postpartum Recovery</a></li>
+    <li><a href="{% url 'evidence_info_category' 'Infant Care' %}">Read more about Infant Care</a></li>
+</ul>
+
 {% if info_list %}
     <ul>
         {% for info in info_list %}
@@ -17,6 +41,11 @@
             <h3>{{ info.title }}</h3>
             <p>{{ info.content }}</p>
             <small>Published on {{ info.published_at }}</small>
+
+            <!-- Display the article link if it exists -->
+            {% if info.article_link %}
+                <p><a href="{{ info.article_link }}" target="_blank">Read the full article</a></p>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

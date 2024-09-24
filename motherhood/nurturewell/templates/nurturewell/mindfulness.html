@@ -92,24 +92,32 @@
             </li>
             {% endfor %}
         </ul>
+        <h2>Relaxation Video</h2>
+    <iframe width="560" height="315" src="https://www.bing.com/videos/riverview/relatedvideo?q=nature%20sounds&mid=1135D84E5F155BDF6DF51135D84E5F155BDF6DF5&ajaxhist=0" frameborder="0" allowfullscreen></iframe>
     </section>
 
     <!-- Mindful Movement Section -->
-    <section>
-        <h2>Mindful Movement</h2>
-        <ul>
-            {% for movement in mindful_movements %}
-            <li>
-                <h3>{{ movement.title }}</h3>
-                <p>{{ movement.description }}</p>
-                <video width="320" height="240" controls>
-                    <source src="{{ movement.video.url }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </li>
-            {% endfor %}
-        </ul>
-    </section>
+<section>
+    <h2>Mindful Movement</h2>
+    <ul>
+        {% for movement in mindful_movements %}
+        <li>
+            <h3>{{ movement.title }}</h3>
+            <p>{{ movement.description }}</p>
+            <video width="320" height="240" controls>
+                <source src="{{ movement.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Mindful Meditation Video -->
+    <h2>Mindful Meditation to Begin a New Day with Love and Gratitude</h2>
+    <iframe width="320" height="240" src="https://www.youtube.com/embed/nxF6xxOXvyE" frameborder="0" allowfullscreen></iframe>
+</section>
+
+
 
     <!-- Emotional Tracking Section -->
     <section>

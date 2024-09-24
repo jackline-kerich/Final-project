@@ -81,6 +81,40 @@ class CommunityPost(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True)
+
+    def __str__(self):
+        return self.user.username
+    
+class Post(models.Model):
+    title = models.CharField(max_length=200)  # Make sure the 'title' field exists
+    content = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')  # Ensure Post is defined
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.post.title}'
+class Reaction(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reaction_type = models.CharField(max_length=10)  # e.g., 'like', 'love'
+
+    class Meta:
+        unique_together = ('post', 'user')
+
+    
 class EvidenceBasedInfo(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()

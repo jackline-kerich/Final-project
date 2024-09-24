@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+from .models import Comment
 
 # Registration Form
 class RegistrationForm(forms.ModelForm):
@@ -30,3 +31,8 @@ class HealthMetricsForm(forms.Form):
     systolic = forms.IntegerField(label="Systolic Blood Pressure (mm Hg)", required=True)
     diastolic = forms.IntegerField(label="Diastolic Blood Pressure (mm Hg)", required=True)
     sleep_hours = forms.IntegerField(label="Sleep Hours (Daily)", required=True)
+    
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']  # Assuming you only want the 'content' field in the form

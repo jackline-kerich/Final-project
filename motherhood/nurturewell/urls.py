@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .views import profile_view
+from .views import post_detail_view, react_to_post
 
 urlpatterns = [
     path('', views.home_view, name='home'),
@@ -17,4 +19,8 @@ urlpatterns = [
     path('community/', views.community_view, name='community'),
     path('evidence-info/', views.evidence_info_view, name='evidence_info'),
     path('evidence-info/<str:category>/', views.evidence_info_view, name='evidence_info_category'),
+    path('profile/', views.profile, name='profile'), 
+    path('profile/<str:username>/', profile_view, name='profile_view'),
+    path('post/<int:post_id>/', views.post_detail_view, name='post_detail'),
+    path('post/<int:post_id>/react/', react_to_post, name='react_to_post'),
 ]
