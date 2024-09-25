@@ -4,11 +4,12 @@ body {
   background-color: dodgerblue; /* Background color for the whole page */
   margin: 0;
   padding: 0;
+  color: #f0f8ff; /* Light font color for contrast */
 }
 
 /* Header styling */
 header {
-  background-color: hotpink; /* Change this to your desired color */
+  background-color: hotpink; /* Keep this color */
   color: white; /* Text color */
   padding: 10px 0; /* Top and bottom padding */
   text-align: center;
@@ -27,7 +28,7 @@ nav ul li {
 }
 
 nav ul li a {
-  color: white; /* Link color */
+  color: white; /* Link color for visibility */
   text-decoration: none; /* Remove underline from links */
   font-weight: bold;
 }
@@ -40,9 +41,9 @@ nav ul li a:hover {
 form {
   margin: 20px;
   padding: 20px;
-  background-color:hotpink;
-  border: 1px solid #ddd;
-  border-color: hotpink; /* Border color */
+  background-color: hotpink; /* Keep this color */
+  border: 1px solid hotpink; /* Border color */
+  color: white; /* Light font color for visibility */
 }
 
 #breathing-circle {
@@ -54,13 +55,14 @@ form {
   transition: transform 4s ease-in-out;
 }
 
-/* Inside your style.css */
+/* Chat container */
 #chat-container {
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color: #f9f9f9; /* Light background */
   border-radius: 8px;
   max-width: 400px;
   margin: 20px auto;
+  color: #333; /* Dark text color for readability */
 }
 
 #chat-messages {
@@ -91,16 +93,31 @@ button:hover {
   background-color: royalblue;
 }
 
+/* Styling for Related Articles Section on Evidence-Based Information*/
+.related-articles h3 {
+  color: white; /* Ensure the heading is visible */
+}
+
+.related-articles ul li a {
+  color: white; /* Ensure the article links are visible */
+  text-decoration: none; /* Remove underline from links */
+}
+
+.related-articles ul li a:hover {
+  text-decoration: underline; /* Underline on hover for emphasis */
+  color:white; /* Change link color on hover for visibility */
+}
+
 /* Footer styling */
 footer {
-  background-color:white; /* Light background color for the footer */
+  background-color: white; /* Light background color for the footer */
   color: black; /* Text color */
   padding: 20px 0; /* Top and bottom padding */
   text-align: center;
-  position: fixed; /* Fixes the footer position */
-  bottom: 0; /* Aligns the footer to the bottom of the viewport */
-  width: 100%; /* Makes the footer span the full width of the page */
-  z-index: 1000; /* Ensures the footer stays on top of other content */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 footer section {
@@ -131,6 +148,7 @@ footer ul li {
   margin: 0 10px; /* Space between social media links */
 }
 
+/* Profile container */
 .profile-container {
   max-width: 600px;
   margin: 20px auto;
@@ -169,9 +187,31 @@ ul li {
 
 ul li a {
   text-decoration: none;
-  color: dodgerblue;
+  color: dodgerblue; /* Maintain blue links */
 }
 
 ul li a:hover {
   text-decoration: underline;
+}
+
+/* Evidence-based information styling */
+.evidence-based-info {
+  color: #f0f8ff; /* Light text color for better contrast */
+}
+
+.evidence-based-info h2 {
+  color: #ffffff; /* White color for headings */
+}
+
+.evidence-based-info p,
+.evidence-based-info li {
+  color: #f0f8ff; /* Light text color for readability on the dodgerblue background */
+}
+
+.evidence-based-info a {
+  color: #f0f8ff; /* Light color for links */
+}
+
+.evidence-based-info a:hover {
+  color: #add8e6; /* Light blue color on hover for better visibility */
 }

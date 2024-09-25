@@ -8,8 +8,8 @@ class HealthMetrics(models.Model):
     systolic = models.IntegerField(default=120)
     diastolic = models.IntegerField(default=70)
     sleep_hours = models.FloatField()
-    date = models.DateField(default=timezone.now)  # Set a default value here
-    
+    date = models.DateField(default=timezone.now)
+
 class MindfulnessActivity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -81,16 +81,19 @@ class CommunityPost(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.user.username} - {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True)
+    bio = models.TextField(blank=True, default="")
     avatar = models.ImageField(upload_to='avatars/', blank=True)
 
     def __str__(self):
         return self.user.username
     
 class Post(models.Model):
-    title = models.CharField(max_length=200)  # Make sure the 'title' field exists
+    title = models.CharField(max_length=200)
     content = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -99,13 +102,14 @@ class Post(models.Model):
         return self.title
     
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')  # Ensure Post is defined
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Comment by {self.user.username} on {self.post.title}'
+
 class Reaction(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -114,7 +118,6 @@ class Reaction(models.Model):
     class Meta:
         unique_together = ('post', 'user')
 
-    
 class EvidenceBasedInfo(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -129,3 +132,9 @@ class EvidenceBasedInfo(models.Model):
     def __str__(self):
         return self.title
 
+class Experience(models.Model):
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text[:50]

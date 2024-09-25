@@ -18,9 +18,12 @@ from .models import (
     GratitudeEntry, Affirmation, MoodEntry, MindfulnessChallenge
 )
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import UserProfile
+from .models import UserProfile,Post
 from .models import Post, Comment
 from .forms import CommentForm
+from .models import EvidenceBasedInfo, Experience
+from django.http import HttpResponse
+from django.views.generic import DetailView, TemplateView
 
 # Home view
 def home_view(request):
@@ -251,4 +254,40 @@ def react_to_post(request, post_id):
 def profile(request):
     return render(request, 'nurturewell/profile.html', {'profile': profile})
 
+def search_articles(request):
+    query = request.GET.get('query','')
+    # Implement your search logic here. This is a basic example.
+    results = EvidenceBasedInfo.objects.filter(title__icontains=query)
     
+    return render(request, 'nurturewell/evidence_info.html', {'info_list': results, 'category': 'Search Results'})
+
+def submit_experience(request):
+    if request.method == 'POST':
+        experience_text = request.POST.get('experience_text')
+        Experience.objects.create(text=experience_text)  # Save the experience to the database
+        return redirect('evidence_info')  # Redirect after submission
+    return HttpResponse("Method not allowed", status=405)
+
+def evidence_info_view(request, category='Pregnancy'):
+    # Retrieve articles based on the selected category
+    info_list = EvidenceBasedInfo.objects.filter(category__iexact=category)  # Use case-insensitive match
+
+    # Get all submitted experiences
+    experiences = Experience.objects.all()  
+
+    # Render the template with the information and experiences
+    return render(request, 'nurturewell/evidence_info.html', {
+        'info_list': info_list,
+        'category': category,
+        'experiences': experiences,  # Pass the experiences to the template
+    })
+    
+class ProfileView(DetailView):
+    model = UserProfile
+    template_name = 'nurturewell/profile.html'
+    context_object_name = 'user'
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'nurturewell/post_detail.html'
+    context_object_name = 'post'

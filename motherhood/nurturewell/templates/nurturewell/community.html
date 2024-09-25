@@ -1,4 +1,3 @@
-<!-- templates/nurturewell/community.html -->
 {% load static %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 
@@ -11,7 +10,6 @@
     </li>
     {% endfor %}
 </ul>
-
 
 <!-- Add within Supportive Community Section -->
 <div id="chat-container">
@@ -55,3 +53,24 @@
         }
     }
 </script>
+
+<h3>Update Profile:</h3>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Render the form fields -->
+    <button type="submit">Update Profile</button>
+</form>
+
+<h3>{{ profile.user.username }}'s Profile</h3>
+<!-- Display user avatar -->
+{% if profile.avatar %}
+    <img src="{{ profile.avatar.url }}" alt="Profile Picture" class="avatar">
+{% else %}
+    <img src="{% static 'default_avatar.png' %}" alt="Default Avatar" class="avatar">
+{% endif %}
+
+<!-- Display user bio -->
+<div class="bio">
+    <h3>Bio:</h3>
+    <p>{{ profile.bio|default:"This user has not added a bio yet." }}</p>
+</div>

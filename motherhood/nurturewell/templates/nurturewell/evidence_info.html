@@ -1,54 +1,126 @@
-<!-- templates/nurturewell/evidence_info.html -->
-{% load static %}
-<link rel="stylesheet" href="{% static 'style.css' %}"> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence-Based Information</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+<body>
 
-<h1>Evidence-Based Information</h1>
+<!-- Header Section -->
+<header>
+    <h1>Evidence-Based Information</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Pregnancy</a></li>
+            <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Childbirth</a></li>
+            <li><a href="{% url 'evidence_info_category' 'Postpartum' %}">Postpartum Recovery</a></li>
+            <li><a href="{% url 'evidence_info_category' 'Infant Care' %}">Infant Care</a></li>
+        </ul>
+    </nav>
+</header>
 
-<!-- Navigation for different categories -->
-<ul>
-    <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Pregnancy</a></li>
-    <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Childbirth</a></li>
-    <li><a href="{% url 'evidence_info_category' 'Postpartum' %}">Postpartum Recovery</a></li>
-    <li><a href="{% url 'evidence_info_category' 'Infant Care' %}">Infant Care</a></li>
-</ul>
+<!-- Main Content Section -->
+<main>
+    <section>
+        <h2>Information on {{ category }}</h2>
 
-<h2>Information on {{ category }}</h2>
+        <!-- Display category-specific content -->
+        {% if category == 'Pregnancy' %}
+            <p>Pregnancy is a time of significant change for mothers. It's essential to focus on nutrition, regular check-ups, and mental well-being. Consider discussing your concerns with healthcare providers to ensure a healthy pregnancy.</p>
+            <p><strong>Key Takeaways:</strong></p>
+            <ul>
+                <li>Focus on balanced nutrition.</li>
+                <li>Schedule regular prenatal check-ups.</li>
+                <li>Engage in mental wellness activities.</li>
+            </ul>
+            <p>For a detailed week-by-week guide to your pregnancy, check out this <a href="https://www.babycenter.com/pregnancy/week-by-week" target="_blank">comprehensive resource</a>.</p>
+            <p>Learn more about how your body changes during pregnancy <a href="https://www.babycenter.com/pregnancy/your-body" target="_blank">here</a>.</p>
+        {% elif category == 'Childbirth' %}
+            <p>Preparing for childbirth involves understanding the process and creating a birth plan. Consider what kind of environment you want during labor.</p>
+            <p>Watch this <a href="https://www.youtube.com/watch?v=n5AIJw5YbJ4" target="_blank">video</a> for important insights on what to expect during childbirth.</p>
+        {% elif category == 'Postpartum' %}
+            <p>Postpartum recovery is crucial. Rest, nutrition, and support are key to recovery during this period.</p>
+            <p>Check out this <a href="https://www.bing.com/videos/riverview/relatedvideo?q=WHO+on+postpartum&mid=DA2ACAE97348839BF3DCDA2ACAE97348839BF3DC&FORM=VIRE" target="_blank">video</a> from WHO that discusses postpartum care.</p>
+        {% elif category == 'Infant Care' %}
+            <p>Infant care requires attention to feeding, sleeping, and developmental milestones. Connecting with pediatricians for guidance is beneficial.</p>
+            <p>For guidance on baby development, refer to this resource <a href="https://www.babycenter.com/pregnancy/your-baby" target="_blank">here</a>.</p>
+        {% endif %}
+    </section>
 
-<!-- Helpful paragraphs for each category -->
-{% if category == 'Pregnancy' %}
-    <p>Pregnancy is a time of significant change for mothers. It's essential to focus on nutrition, regular check-ups, and mental well-being.</p>
-    <p>Consider discussing your concerns with healthcare providers to ensure a healthy pregnancy.</p>
-{% elif category == 'Childbirth' %}
-    <p>Preparing for childbirth involves understanding the process and creating a birth plan. Consider what kind of environment you want during labor.</p>
-{% elif category == 'Postpartum' %}
-    <p>Postpartum recovery is crucial. Rest, nutrition, and support are key to recovery during this period.</p>
-{% elif category == 'Infant Care' %}
-    <p>Infant care requires attention to feeding, sleeping, and developmental milestones. Connecting with pediatricians for guidance is beneficial.</p>
-{% endif %}
+    <!-- Related Articles Section -->
+    <section>
+        <h3>Related Articles</h3>
+        <ul>
+            <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Read more about Pregnancy</a></li>
+            <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Read more about Childbirth</a></li>
+            <li><a href="{% url 'evidence_info_category' 'Postpartum' %}">Read more about Postpartum Recovery</a></li>
+            <li><a href="{% url 'evidence_info_category' 'Infant Care' %}">Read more about Infant Care</a></li>
+        </ul>
+    </section>
 
-<h3>Related Articles</h3>
-<ul>
-    <li><a href="{% url 'evidence_info_category' 'Pregnancy' %}">Read more about Pregnancy</a></li>
-    <li><a href="{% url 'evidence_info_category' 'Childbirth' %}">Read more about Childbirth</a></li>
-    <li><a href="{% url 'evidence_info_category' 'Postpartum' %}">Read more about Postpartum Recovery</a></li>
-    <li><a href="{% url 'evidence_info_category' 'Infant Care' %}">Read more about Infant Care</a></li>
-</ul>
+    <!-- Article List Section -->
+    <section>
+        <h3>Latest Articles</h3>
+        {% if info_list %}
+            <ul>
+                {% for info in info_list %}
+                <li>
+                    <img src="{% static 'images/article_icon.png' %}" alt="{{ info.title }}" class="article-icon">
+                    <h4>{{ info.title }}</h4>
+                    <p>{{ info.content }}</p>
+                    <small>Published on {{ info.published_at }}</small>
+                    <!-- Display the article link if it exists -->
+                    {% if info.article_link %}
+                        <p><a href="{{ info.article_link }}" target="_blank">Read the full article</a></p>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No information available for this category.</p>
+        {% endif %}
+    </section>
 
-{% if info_list %}
+    <!-- Search Articles Section -->
+    <section>
+        <h3>Search Articles</h3>
+        <form action="{% url 'search_articles' %}" method="get">
+            <input type="text" name="query" placeholder="Search articles..." required>
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <!-- Share Your Experience Section -->
+    <section>
+        <h3>Share Your Experience</h3>
+        <form action="{% url 'submit_experience' %}" method="post">
+            {% csrf_token %}
+            <textarea name="experience_text" rows="4" placeholder="Share your tips or experiences..."></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <!-- Share Your Experience Section -->
+<section>
+    <h3>Submitted Experiences</h3>
     <ul>
-        {% for info in info_list %}
-        <li>
-            <h3>{{ info.title }}</h3>
-            <p>{{ info.content }}</p>
-            <small>Published on {{ info.published_at }}</small>
-
-            <!-- Display the article link if it exists -->
-            {% if info.article_link %}
-                <p><a href="{{ info.article_link }}" target="_blank">Read the full article</a></p>
-            {% endif %}
-        </li>
+        {% for experience in experiences %}
+            <li>{{ experience.text }} (Submitted on {{ experience.created_at|date:"F j, Y, g:i a" }})</li>
+        {% empty %}
+            <li>No experiences submitted yet.</li>
         {% endfor %}
     </ul>
-{% else %}
-    <p>No information available for this category.</p>
-{% endif %}
+</section>
+
+
+</main>
+
+<!-- Footer Section -->
+<footer>
+    <p>&copy; 2024 NurtureWell. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

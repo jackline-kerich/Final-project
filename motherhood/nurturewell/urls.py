@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from .views import profile_view
 from .views import post_detail_view, react_to_post
-
+from .views import search_articles
+from .views import evidence_info_view,submit_experience,search_articles
 urlpatterns = [
     path('', views.home_view, name='home'),
     path('register/', views.register_view, name='register'),
@@ -23,4 +24,7 @@ urlpatterns = [
     path('profile/<str:username>/', profile_view, name='profile_view'),
     path('post/<int:post_id>/', views.post_detail_view, name='post_detail'),
     path('post/<int:post_id>/react/', react_to_post, name='react_to_post'),
+    path('search/', search_articles, name='search_articles'),
+    path('evidence-info/<str:category>/', evidence_info_view, name='evidence_info'),
+    path('submit-experience/', views.submit_experience, name='submit_experience'),
 ]
